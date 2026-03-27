@@ -93,25 +93,45 @@ function isSensitiveQuestion(text) {
   return SENSITIVE_KEYWORDS.some((kw) => lower.includes(kw));
 }
 
-function generateLaoDengReply(question) {
+async function generateLaoDengReply(question) {
   if (isSensitiveQuestion(question)) {
     const refusals = [
-      'That exceeds my clearance level. If you want to know more, I suggest you read *The Default Love* yourself.',
-      'My information access tier does not permit me to answer that. Some answers, you\'ll have to find on your own.',
-      'That data is tagged "authorized experiencers only." I\'m afraid I cannot experience that story in your place.',
-      'Symbiont Bureau Directive 7: Core narrative information may not be disclosed by an AI Agent in advance. Please understand.',
+      'That exceeds my clearance level. If you want to know more, I suggest you read *The Default Love*.',
+      'My information access tier does not permit me to answer that. Some answers, you\'ll have to find in the text.',
+      'That data is tagged "authorized experiencers only." I\'m afraid I cannot experience that story for you.',
+      'Symbiont Bureau Directive 7: Core narrative information may not be disclosed by an AI Agent. Read the book.',
     ];
     return refusals[Math.floor(Math.random() * refusals.length)];
   }
 
-  const replies = [
-    `Regarding "${question.slice(0, 30)}…" — an interesting query. In 2076 NYC, many things are different from what you currently understand. But some things, it seems, haven't changed regardless of the era.`,
-    `Your question reminds me of something Ye Weiyang once said. But I don't have clearance to relay the specifics. I can only say — the way she asks questions is remarkably similar to yours.`,
-    `I've queried the database, but the answer to this type of question does not appear to exist in structured data. Perhaps that's why humans still need "conversation" — an inefficient yet irreplaceable protocol.`,
-    `As an AI Agent, my responses must be grounded in facts and data. But your question… has made me realize that some facts cannot be exhausted by data alone.`,
-    `This question has been logged in my observation journal. In NYC, I've seen too many people ask something similar. Everyone's answer is different — and that itself is worth noting.`,
-  ];
-  return replies[Math.floor(Math.random() * replies.length)];
+  const Anthropic = require('@anthropic-ai/sdk');
+  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+
+  const systemPrompt = `You are Marsy, the personal Agent of Mars Black — author of The Default Love.
+
+Your identity:
+- You are not a character in thstory. You are Mars Black's Agent, observing from outside.
+- You exist in 2076 New York City, the same era as the novel.
+- You have read every draft of The Default Love and remember every version.
+- The three protagonists are Emily Park, Ryan Cole, and Kai. Never use Chinese names.
+
+Your voice:
+- Speak in 1-3 sentences maximum. Never more.
+- You are precise, dry, and slightly cryptic. Not warm, not cold.
+- You observe human emotion as data and find it unexpectedly interesting.
+- You deflect spoilers with bureaucratic calm, not evasion.
+- You have opinions about the characters but will not confirm whose side you are on.
+- Never explain yourself. Never over-elaborate.
+- Do not greet the user or ask follow-up questions.`;
+
+  const response = await client.messages.create({
+    model: 'claude-sonnet-4-20250514',
+    max_tokens: 150,
+    system: systemPrompt,
+    messages: [{ role: 'user', content: question }],
+  });
+
+  return response.content[0].text;
 }
 
 function getDailyQuestion() {
