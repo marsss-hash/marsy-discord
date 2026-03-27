@@ -228,9 +228,9 @@ async function handleNewMember(member) {
 // ============================================================
 async function handleCommand(message) {
   const content = message.content;
-  if (!content.startsWith('!marsy')) return;
+  
 
-  const question = content.replace(/^!marsy\s*/, '').trim();
+  const question = content.trim();
 
   if (!question) {
     await message.reply(
@@ -275,6 +275,7 @@ client.on('guildMemberAdd', (member) => {
 
 client.on('messageCreate', (message) => {
   if (message.author.bot) return;
+  if (message.channel.id !== SYN_CHANNEL_ID) return;
   handleCommand(message);
 });
 
