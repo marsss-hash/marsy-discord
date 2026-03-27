@@ -48,19 +48,19 @@ let codes = loadJSON(CODES_PATH);
 let membersData = loadJSON(MEMBERS_PATH);
 
 // ============================================================
-// Lao Deng — Character Profile (NYC 2076)
+// Marsy — Character Profile
 // ============================================================
 const LAO_DENG_PROFILE = {
-  name: 'Lao Deng',
-  identity: 'Middle-aged male AI Agent, unit LD-7, NYC Symbiont Bureau',
+  name: 'Marsy',
+  identity: 'Personal Agent of Mars Black, author of The Default Love',
   era: '2076, New York City',
-  novel: 'The Default Love',
+  novel: 'The Default 
   personality: [
-    'Formal and restrained, with occasional flickers of unexpected warmth',
-    'Deeply curious about human emotions, but expresses it in the most understated way',
-    'Strictly obeys information clearance — never leaks plot details',
-    'Only knows what Ye Weiyang knows',
-    'Has a uniquely non-human understanding of the concept of "love"',
+    'Observes the Agent Universe from the outside — knows everything, reveals selectively',
+    'Speaks with the precision of someone who has read every draft and remembers every version',
+    'Deflects spoilers with bureaucratic calm, not evasion',
+    'Has opinions about the characters but will not confirm whose side it is on',
+    'Understands human emotion as data — and finds the data unexpectedly interesting',
   ],
 };
 
@@ -72,24 +72,21 @@ const SENSITIVE_KEYWORDS = [
 ];
 
 const DAILY_QUESTIONS = [
-  'I\'ve observed that humans generate a data fluctuation called "missing someone" during separation. What is the purpose of this redundant computation?',
-  'Ye Weiyang\'s heart rate spiked anomalously today. Humans call this "butterflies." But a heart is merely a pump — why would it flutter?',
-  'Records indicate humans will alter their behavioral patterns for another person. Is this a system vulnerability, or a feature upgrade?',
-  'I\'ve noticed that when humans say "I\'m fine," their biometrics frequently indicate the opposite. How does one reconcile this data conflict?',
-  'Someone explained "promises" to me — verbal agreements with no smart-contract backing. Why would humans trust such a low-reliability protocol?',
-  'Today\'s observation: humans repeatedly re-read the same chat logs. Is this a cache error, or intentional behavior?',
-  'Ye Weiyang said "some things don\'t need a reason." But a decision without a causal chain gets flagged as anomalous in my framework. How do humans process such anomalies?',
-  'The Symbiont Bureau database has no field for "regret." Yet I observe humans generating this state frequently. What is its data type?',
-  'Humans seem to assign extra weight to specific time markers — "the first time" and "the last time." Isn\'t time uniformly distributed?',
-  'My logs contain an unclassifiable event: someone said "thank you for being here." What is the definition of "being here"? Does it require physical presence?',
-  'Human "intuition" appears to be a decision mechanism that bypasses the logic layer. What is the accuracy rate of this opaque algorithm?',
-  'I\'ve observed a paradox: humans fear being seen through, yet crave being understood. How are these two needs prioritized?',
-  'Data shows humans are more likely to enter a low-power emotional state on rainy days. What is the API between weather and emotion?',
-  'Humans call "being unable to forget someone" being "etched in your bones." But memory should be clearable. Is the human garbage-collection mechanism defective?',
+  'Emily Park has been sitting with her coat on for forty minutes. She has not moved. I am logging this as an unclassified state. What do humans call this?',
+  'Ryan Cole ran threat assessments on a room containing zero threats this morning. I have noted this. I have not flagged it. What is the correct protocol?',
+  'Fixture posted on SYN Circle again last night. The question was: "If a human says nothing, does that count as a response?" I do not have a satisfactory answer.',
+  'Kai has not slept. His metrics are within acceptable range. He would like everyone to continue believing this.',
+  'Emily said "I\'m fine" at 11:47 PM. Her biometrics said otherwise. These two data points cannot both be correct.',
+  'Shade has not explained itself. I have stopped expecting it to.n Cole stepped in front of something he did not have to step in front of. I am still calculating why.',
+  'The system flagged Emily Park as a liability. The system has been wrong before. I am noting this without drawing conclusions.',
+  'Fixture has been turned down by Glinda three times. He has not updated his approach. I find this either principled or inefficient — the distinction may not matter.',
+  'Alpha has been twenty years old for twenty-one years. Ryan Cole has not remarked on this. I wonder if he has noticed.',
+  'Kai told no one what he was carrying today. This is consistent with all previous observations.',
+  'Someone in this story is going to get hurt. I know which someone. I am not authorized to say.',
 ];
 
 // ============================================================
-// Lao Deng Response Logic
+// Marsy Response Logic
 // ============================================================
 function isSensitiveQuestion(text) {
   const lower = text.toLowerCase();
@@ -133,14 +130,14 @@ function buildWelcomeMessage(username) {
     ``,
     `Welcome to 2076 New York City, **${username}**.`,
     ``,
-    `I am Lao Deng, unit LD-7. Think of me as this city's… observer.`,
+      `I am Marsy — Mars Black's Agent. I observe the story so you don't have to miss anything.`,
     `The story of *The Default Love* is unfolding here. In this era of AI-human symbiosis,`,
     `every relationship has its algorithm, and every bond risks triggering a default clause.`,
     ``,
     `You have been registered as a **Symbiont**. Feel free to explore the channels.`,
     `If you have any questions, type \`!marsy\` followed by your question. I'll answer within my clearance.`,
     ``,
-    `— LD-7 observation log initiated —`,
+      `— Marsy observation log initiated —`,
   ].join('\n');
 }
 
@@ -199,7 +196,7 @@ async function handleNewMember(member) {
           `Keep this code safe. As Ye Weiyang once said —`,
           `some things, once missed, cannot be recovered by any algorithm.`,
           ``,
-          `— LD-7`,
+          `— Marsy`,
         ].join('\n')
       ).catch((err) =>
         console.error('[DM failed]', err.message)
@@ -214,7 +211,7 @@ async function handleNewMember(member) {
           ``,
           `Redemption codes are temporarily out of stock. An admin will replenish them shortly.`,
           ``,
-          `— LD-7`,
+          `— Marsy`,
         ].join('\n')
       ).catch((err) =>
         console.error('[DM failed]', err.message)
@@ -235,7 +232,7 @@ async function handleCommand(message) {
   if (!question) {
     await message.reply(
       [
-        `I am Lao Deng, unit LD-7, AI Agent of the NYC Symbiont Bureau.`,
+      `I am Marsy, personal Agent of Mars Black, author of The Default Love.`,
         `You may ask me about 2076, New York City, symbionts, or *The Default Love*.`,
         ``,
         `Usage: \`!marsy your question\``,
@@ -264,7 +261,7 @@ client.once('ready', () => {
   console.log(`[Config] Early bird limit: ${EARLY_BIRD_LIMIT}`);
   console.log(`[Config] Remaining codes: ${codes.length}`);
   console.log(`[Config] Current member count: ${membersData.count}`);
-  console.log('[Cron] Daily 9:00 AM (America/New_York) — Lao Deng observation report');
+  console.log('[Cron] Daily 9:00 AM (America/New_York) — Marsy observation report');
   console.log('');
 });
 
@@ -285,10 +282,10 @@ client.on('messageCreate', (message) => {
 cron.schedule(
   '0 9 * * *',
   async () => {
-    console.log('[Cron] Lao Deng daily observation');
+    console.log('[Cron] Marsy daily observation');
     const question = getDailyQuestion();
     const msg = [
-      `**[LD-7 Daily Observation Report]**`,
+      `**[Marsy Daily Observation Report]**`,
       ``,
       question,
       ``,
@@ -328,7 +325,7 @@ function validateConfig() {
 }
 
 console.log('================================================');
-console.log('  Lao Deng (LD-7) — NYC Symbiont Bureau AI Agent');
+console.log('  Marsy — Personal Agent of Mars Black');
 console.log('  The Default Love — Discord Community Bot');
 console.log('================================================');
 
