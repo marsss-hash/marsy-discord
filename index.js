@@ -264,7 +264,7 @@ async function handleCommand(message) {
   }
 
   console.log(`[Command] ${message.author.username}: !marsy ${question}`);
-  const reply = generateLaoDengReply(question);
+  const reply = await generateLaoDengReply(question);
   await message.reply(reply).catch((err) =>
     console.error('[Reply failed]', err.message)
   );
